@@ -6,7 +6,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 /**
- * Created by Jesús Tomás on 04/05/2015.
+ * Created by Jes?s Tom?s on 04/05/2015.
  */
 public class DireccionesGestureDetector extends GestureDetector {
 
