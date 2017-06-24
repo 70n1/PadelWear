@@ -35,5 +35,8 @@ public class MainActivity extends Activity {
         lista.setAdapter(adaptador);
         lista.setCenterEdgeItems(true);
         lista.setLayoutManager(new MyChildLayoutManager(this));
+
+        lista.setCircularScrollingGestureEnabled(true);
+        lista.setScrollDegreesPerScreen(180); lista.setBezelWidth(0.5f);
     }
 }
