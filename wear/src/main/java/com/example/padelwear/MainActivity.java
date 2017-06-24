@@ -16,6 +16,7 @@ public class MainActivity extends Activity {
     // Elementos a mostrar en la lista
     String[] elementos = {"Partida", "Terminar partida", "Historial", "Notificación", "Pasos", "Pulsaciones", "Terminar partida"};
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

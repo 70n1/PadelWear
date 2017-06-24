@@ -17,6 +17,12 @@ import android.widget.TextView;
 
 import com.example.comun.DireccionesGestureDetector;
 import com.example.comun.Partida;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -26,16 +32,16 @@ import java.util.Date;
  */
 
 public class Contador extends WearableActivity {
+    private static final String WEAR_ARRANCAR_ACTIVIDAD = "/arrancar_actividad";
     private Partida partida;
     private TextView misPuntos, misJuegos, misSets, susPuntos, susJuegos, susSets, hora;
     private Vibrator vibrador;
     private long[] vibrEntrada = {0l, 500};
     private long[] vibrDeshacer = {0l, 500, 500, 500};
-
     private DismissOverlayView dismissOverlay;
-
     private Typeface fuenteNormal = Typeface.create("sans-serif", 0);
     private Typeface fuenteFina = Typeface.create("sans-serif-thin", 0);
+    private GoogleApiClient apiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +144,10 @@ public class Contador extends WearableActivity {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setAmbientEnabled();
+
+        apiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).build();
+
+        mandarMensaje(WEAR_ARRANCAR_ACTIVIDAD, "");
     }
 
     void actualizaNumeros() {
@@ -147,6 +157,20 @@ public class Contador extends WearableActivity {
         susJuegos.setText(partida.getSusJuegos());
         misSets.setText(partida.getMisSets());
         susSets.setText(partida.getSusSets());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        apiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        if (apiClient != null && apiClient.isConnected()) {
+            apiClient.disconnect();
+        }
+        super.onStop();
     }
 
     @Override
@@ -170,12 +194,13 @@ public class Contador extends WearableActivity {
     }
 
 
-    private void ponerHora(){
+    private void ponerHora() {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         hora.setText(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE));
         Log.v("PadelWear", "cambiada hora");
     }
+
     @Override
     public void onExitAmbient() {
         super.onExitAmbient();
@@ -200,5 +225,24 @@ public class Contador extends WearableActivity {
         super.onUpdateAmbient();
         ponerHora();
         // Actualizar contenido
+    }
+
+    private void mandarMensaje(final String path, final String texto) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                NodeApi.GetConnectedNodesResult nodos = Wearable.NodeApi.getConnectedNodes(apiClient).await();
+                for (Node nodo : nodos.getNodes()) {
+                    Wearable.MessageApi.sendMessage(apiClient, nodo.getId(), path, texto.getBytes()).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
+                        @Override
+                        public void onResult(MessageApi.SendMessageResult resultado) {
+                            if (!resultado.getStatus().isSuccess()) {
+                                Log.e("sincronizacion", "Error al mandar mensaje. Código:" + resultado.getStatus().getStatusCode());
+                            }
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 }
