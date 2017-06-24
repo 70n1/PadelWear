@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center">
+
+    <android.support.wearable.view.DelayedConfirmationView
+        android:id="@+id/cuenta_atras"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cancel_circle"
+        app:circle_border_color="@color/light_grey"
+        app:circle_border_width="10dp"
+        app:circle_color="@color/blue"
+        app:circle_radius="60dp" />
+</LinearLayout>
