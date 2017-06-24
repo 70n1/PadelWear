@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.DismissOverlayView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,13 +18,16 @@ import android.widget.TextView;
 import com.example.comun.DireccionesGestureDetector;
 import com.example.comun.Partida;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by el70n on 24/06/2017.
  */
 
 public class Contador extends WearableActivity {
     private Partida partida;
-    private TextView misPuntos, misJuegos, misSets, susPuntos, susJuegos, susSets;
+    private TextView misPuntos, misJuegos, misSets, susPuntos, susJuegos, susSets, hora;
     private Vibrator vibrador;
     private long[] vibrEntrada = {0l, 500};
     private long[] vibrDeshacer = {0l, 500, 500, 500};
@@ -46,6 +50,7 @@ public class Contador extends WearableActivity {
         susJuegos = (TextView) findViewById(R.id.susJuegos);
         misSets = (TextView) findViewById(R.id.misSets);
         susSets = (TextView) findViewById(R.id.susSets);
+        hora = (TextView) findViewById(R.id.hora);
         actualizaNumeros();
         View fondo = findViewById(R.id.fondo);
         fondo.setOnTouchListener(new View.OnTouchListener() {
@@ -160,8 +165,17 @@ public class Contador extends WearableActivity {
         misSets.getPaint().setAntiAlias(false);
         susSets.setTypeface(fuenteFina);
         susSets.getPaint().setAntiAlias(false);
+        hora.setVisibility(View.VISIBLE);
+        ponerHora();
     }
 
+
+    private void ponerHora(){
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        hora.setText(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE));
+        Log.v("PadelWear", "cambiada hora");
+    }
     @Override
     public void onExitAmbient() {
         super.onExitAmbient();
@@ -178,11 +192,13 @@ public class Contador extends WearableActivity {
         misSets.getPaint().setAntiAlias(true);
         susSets.setTypeface(fuenteNormal);
         susSets.getPaint().setAntiAlias(true);
+        hora.setVisibility(View.GONE);
     }
 
     @Override
     public void onUpdateAmbient() {
         super.onUpdateAmbient();
+        ponerHora();
         // Actualizar contenido
     }
 }
