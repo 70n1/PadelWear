@@ -34,6 +34,6 @@ public class MainActivity extends Activity {
         });
         lista.setAdapter(adaptador);
         lista.setCenterEdgeItems(true);
-        lista.setLayoutManager(new CurvedChildLayoutManager(this));
+        lista.setLayoutManager(new MyChildLayoutManager(this));
     }
 }
