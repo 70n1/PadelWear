@@ -2,7 +2,9 @@ package com.example.padelwear;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.CurvedChildLayoutManager;
 import android.support.wearable.view.WatchViewStub;
 import android.support.wearable.view.WearableRecyclerView;
@@ -52,4 +54,5 @@ public class MainActivity extends Activity {
         lista.setScrollDegreesPerScreen(180);
         lista.setBezelWidth(0.5f);
     }
+
 }
