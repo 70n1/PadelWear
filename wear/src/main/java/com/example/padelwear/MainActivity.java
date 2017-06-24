@@ -35,6 +35,9 @@ public class MainActivity extends Activity {
                     case 4:
                         startActivity(new Intent(MainActivity.this, Pasos.class));
                         break;
+                    case 6:
+                        startActivity(new Intent(MainActivity.this, SwipeDismiss.class));
+                        break;
                 }
             }
         });

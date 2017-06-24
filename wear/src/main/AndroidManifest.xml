@@ -23,6 +23,7 @@
         <activity android:name=".Pasos"/>
         <activity android:name=".Historial"/>
         <activity android:name=".CuentaAtras"/>
+        <activity android:name=".SwipeDismiss"/>
     </application>
 
 </manifest>
