@@ -14,10 +14,13 @@ import android.widget.TextView;
 import com.example.comun.DireccionesGestureDetector;
 import com.example.comun.Partida;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataItemBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
@@ -125,6 +128,42 @@ public class Contador extends Activity implements GoogleApiClient.ConnectionCall
         });
 
         apiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).addConnectionCallbacks(this).build();
+        accederDatosInicio();
+    }
+
+
+    void accederDatosInicio(){
+
+        PendingResult<DataItemBuffer> resultado = Wearable.DataApi.getDataItems(apiClient);
+        resultado.setResultCallback(new ResultCallback<DataItemBuffer>() {
+            @Override
+            public void onResult(DataItemBuffer dataItems) {
+                for (DataItem dataItem : dataItems) {
+
+                    if (dataItem.getUri().getPath().equals(WEAR_PUNTUACION)) {
+                        dataMap = DataMapItem.fromDataItem(dataItem).getDataMap();
+
+                        partida.setPuntuacion(dataMap.getByte(KEY_MIS_PUNTOS), dataMap.getByte(KEY_SUS_PUNTOS), dataMap.getByte(KEY_MIS_JUEGOS), dataMap.getByte(KEY_SUS_JUEGOS), dataMap.getByte(KEY_MIS_SETS), dataMap.getByte(KEY_SUS_SETS) );
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                actualizaNumeros();
+                            /*misPuntos.setText(String.valueOf(dataMap.getByte(KEY_MIS_PUNTOS)));
+                            susPuntos.setText(String.valueOf(dataMap.getByte(KEY_SUS_PUNTOS)));
+                            misJuegos.setText(String.valueOf(dataMap.getByte(KEY_MIS_JUEGOS)));
+                            susJuegos.setText(String.valueOf(dataMap.getByte(KEY_SUS_JUEGOS)));
+                            misSets.setText(String.valueOf(dataMap.getByte(KEY_MIS_SETS)));
+                            susSets.setText(String.valueOf(dataMap.getByte(KEY_SUS_SETS)));*/
+                            }
+                            /*((TextView) findViewById(R.id.textoContador)).setText(Integer.toString(contador));
+                        }*/
+                        });
+                    }
+                }
+                dataItems.release();
+            }
+        });
     }
 
     void actualizaNumeros() {
