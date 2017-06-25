@@ -71,4 +71,36 @@ public class Partida {
     public String getSusSets() {
         return String.valueOf(puntos.lastElement().getSusSets());
     }
+
+
+    public byte getMisPuntosByte() {
+        return puntos.lastElement().getMiPuntuacion();
+    }
+
+    public byte getMisJuegosByte() {
+        return puntos.lastElement().getMisJuegos();
+    }
+
+    public byte getMisSetsByte() {
+        return puntos.lastElement().getMisSets();
+    }
+
+    public byte getSusPuntosyte() {
+        return puntos.lastElement().getSuPuntuacion();
+    }
+
+    public byte getSusJuegosByte() {
+        return puntos.lastElement().getSusJuegos();
+    }
+
+    public byte getSusSetsByte() {
+        return puntos.lastElement().getSusSets();
+    }
+
+
+
+    public void setPuntuacion(byte miPuntuacion, byte suPuntuacion, byte misJuegos,
+                              byte susJuegos, byte misSets, byte susSets) {
+        puntos.set(puntos.size()-1, new Puntuacion(miPuntuacion, suPuntuacion, misJuegos, susJuegos, misSets, susSets));
+    }
 }
